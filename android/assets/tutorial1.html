@@ -74,11 +74,12 @@
             AR.radar.northIndicator.radius = 0.4;
             
             //error, doesnt work
-            //AR.radar.onClick = function(){ AR.logger.info(Ôradar was clickedÕ);};
+            //AR.radar.onClick = function(){ AR.logger.info(ï¿½radar was clickedï¿½);};
             
             AR.radar.enabled = true;
             
             var radarCircle = new AR.Circle(0.05, {style: {fillColor: '#83ff7b'}});
+            var selectedRadarCircle = new AR.Circle(0.05, {style: {fillColor: '#000000'}});
             
             // current selected object
             var selectedObject = null;
@@ -115,7 +116,6 @@
                     // hide the bubble
                     document.getElementById("footer").style.display = 'block';
                     document.getElementById("poiName").innerHTML=jsonObject[id].name;
-                    document.getElementById("poiDesc").innerHTML=jsonObject[id].description.substring(0,25);
                     document.getElementById("footer").onclick= generateOnPoiBubbleClickFunc(id);
                     
                     // reset the previous selected poi
@@ -127,12 +127,16 @@
                         selectedObject.arLabel.style.backgroundColor = '#FFFFFF80';
                         selectedObject.img.scaling = 1.0;
                         selectedObject.poiObj.renderingOrder = 0;
+                        selectedObject.poiObj.drawables.radar = radarCircle;
                     }
                     
                     // set a new select status for the current selected poi
                     selectedObject = jsonObject[id];
                     selectedObject.arLabel.style.backgroundColor = '#FFFFFFFF';
                     selectedObject.poiObj.renderingOrder = 1;
+                    
+                    selectedObject.poiObj.drawables.radar = selectedRadarCircle;
+                    
                     
                     // start the assigned animation
                     selectedObject.animation.start();
@@ -159,25 +163,13 @@
                     
                     jsonObject[i].arLabel = label;
                     
-                    var poiImage;
-                    if(jsonObject[i].type == 1) 
-                    {
-                        poiImage = firstImage;
-                    }
-                    else if(jsonObject[i].type == 2)
-                    {
-                        poiImage = secondImage;
-                    }
-                    else
-                    {
-                        poiImage = thirdImage;
-                    }
+                    var poiImage = new AR.ImageResource(jsonObject[i].thumbUrl, {onError: errorLoadingImage});
                     
                     
                     var img = new AR.ImageDrawable(poiImage, 2.0,
                                                    {triggers: { 
                                                    onClick:
-                                                   createClickTrigger(jsonObject[i].id)}}
+                                                   createClickTrigger(jsonObject[i].index)}}
                                                    );
                     
                     jsonObject[i].animation = createOnClickAnimation(img);
@@ -230,7 +222,6 @@
         <br/>
         <div id="footer">
             <h3><span id="poiName"></span></h3>
-            Description: <span id="poiDesc"></span><br/>
             <p style="text-align:center;">click for more...</p>
         </div>
     </body></html>
