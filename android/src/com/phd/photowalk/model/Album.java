@@ -9,17 +9,16 @@ public class Album {
 	public String id;
 	public String name="";
 	public String thumbUrl="";
+	public String type;
 	public int totalPhotos, totalLikers, totalContributors;
-	public String lat=null;
-	public String lng=null;
-	
-	private Point point;
+	public Point point;
 	
 	public JSONObject toJSONObject() throws JSONException
 	{
 		JSONObject object = new JSONObject();
 		object.put("id", this.id);
 		object.put("name", this.name);
+		object.put("type", this.type);
 		object.put("thumbUrl", this.thumbUrl);
 		object.put("totalPhotos", this.totalPhotos);
 		object.put("totalLikers", this.totalLikers);
@@ -35,13 +34,15 @@ public class Album {
 		album.id = json.optString("id");
 		album.name = json.optString("name");
 		album.thumbUrl = json.optString("thumbUrl");
+		album.type = json.optString("type");
 		album.totalPhotos = json.optInt("totalPhotos");
 		album.totalLikers = json.optInt("totalLikers");
 		album.totalContributors = json.optInt("totalContributors");
 		
+		
 		JSONObject loc = json.optJSONObject("location");
 		if( loc != null){
-			album.point = new Point(Long.valueOf(loc.getString("latitude")), Long.valueOf(loc.getString("longitude")), 150);
+			album.point = new Point(Float.valueOf(loc.getString("latitude")), Float.valueOf(loc.getString("longitude")), 150);
 		}
 		
 		return album; 

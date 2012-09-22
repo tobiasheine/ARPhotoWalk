@@ -5,9 +5,9 @@ import org.json.JSONObject;
 
 public class Point {
 	
-	private double latitude;
-	private double longitude;
-	private double altitude;
+	public double latitude;
+	public double longitude;
+	public double altitude;
 	
 	public Point(double lat, double lon, double alt)
 	{
