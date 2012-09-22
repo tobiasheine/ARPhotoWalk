@@ -95,7 +95,8 @@
             {
                 return function()
                 {
-                    document.location = "architectsdk://opendetailpage?id="+id;  		
+                	selectedObject = jsonObject[id];
+                    document.location = "architectsdk://opendetailpage?id="+selectedObject.id;  		
                 }
             }
             

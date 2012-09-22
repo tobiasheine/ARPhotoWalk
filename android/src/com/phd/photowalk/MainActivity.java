@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -93,7 +94,8 @@ private static final String TAG = MainActivity.class.getSimpleName();
 		super.onResume();
 
 		this.architectView.onResume();
-		this.architectView.setLocation(TEST_LATITUDE, TEST_LONGITUDE, TEST_ALTITUDE,1f);
+		if(((PHDApplication)getApplication()).getLastKnownLocation()!=null)
+			this.architectView.setLocation(((PHDApplication)getApplication()).getLastKnownLocation().getLatitude(), ((PHDApplication)getApplication()).getLastKnownLocation().getLongitude(), ((PHDApplication)getApplication()).getLastKnownLocation().getAltitude(),1f);
 
 	}
     @Override
@@ -145,10 +147,9 @@ private static final String TAG = MainActivity.class.getSimpleName();
 //		//get the corresponding poi bean for the given id
 //		PoiBean bean = poiBeanList.get(Integer.parseInt(id));
 //		//start a new intent for displaying the content of the bean
-//		Intent intent = new Intent(this, PoiDetailActivity.class);
-//		intent.putExtra("POI_NAME", bean.getName());
-//		intent.putExtra("POI_DESC", bean.getDescription());
-//		this.startActivity(intent);
+		Intent intent = new Intent(this, AlbumDetailActivity.class);
+		intent.putExtra(AlbumDetailActivity.EXTA_ALBUM_ID, id);
+		this.startActivity(intent);
 		return true;
 	}
 	

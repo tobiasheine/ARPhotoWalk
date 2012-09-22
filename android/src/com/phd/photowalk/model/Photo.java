@@ -58,4 +58,8 @@ public class Photo{
 		return photo; 
 	}
 	
+	public float getAspectRatio() {
+		return (float)width/(float)height;
+	}
+	
 }

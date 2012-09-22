@@ -34,7 +34,7 @@
         </activity>
         
          <activity
-            android:name=".PoiDetailActivity"
+            android:name=".AlbumDetailActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
     </application>
