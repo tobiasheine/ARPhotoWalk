@@ -2,6 +2,7 @@ package com.phd.photowalk;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.phd.photowalk.api.NetHelper;
 import com.wikitude.architect.ArchitectUrlListener;
 import com.wikitude.architect.ArchitectView;
 
@@ -170,24 +173,39 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	private void loadSampleWorld() throws IOException {
 		this.architectView.load("tutorial1.html");
 
-		JSONArray array = new JSONArray();
 		poiBeanList = new ArrayList<PoiBean>();
-		try {
-			for (int i = 0; i < 50; i++) {
-				double[] location = createRandLocation();
-				PoiBean bean = new PoiBean(
-						""+i,
-						"POI #" + i,
-						"Probably one of the best POIs you have ever seen. This is the description of Poi #"
-								+ i, (int) (Math.random() * 3), location[0], location[1], location[2]);
-				array.put(bean.toJSONObject());
-				poiBeanList.add(bean);
-			}	
-		this.architectView.callJavascript("newData(" + array.toString() + ");");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		
+		final String urlString = "http://www.eyeem.com/api/v2/search?q=berlin&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&includeAlbums=1&limit=10";
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					JSONArray poiArray = new JSONArray();
+					JSONObject jsonObject = NetHelper.URL2JSONObject(new URL(urlString));
+					JSONObject albums = jsonObject.getJSONObject("albums");
+					JSONArray items = albums.getJSONArray("items");
+
+					for(int i=0; i<10; i++) {
+						JSONObject album = items.getJSONObject(i);
+						JSONObject location = album.optJSONObject("location");
+						
+						if(location!=null) {
+							String lat = (String) location.get("latitude");
+							String lon = (String) location.get("longitude");
+							
+							PoiBean bean = new PoiBean(""+i, "POI #"+i, "Probably one of the best POIs you have ever seen. This is the description of Poi #" +i, (int) (Math.random() * 3), Double.parseDouble(lat), Double.parseDouble(lon), TEST_ALTITUDE + ((Math.random() - 0.5) * 10));
+							poiArray.put(bean.toJSONObject());
+							
+							poiBeanList.add(bean);
+						}
+					}
+						
+					architectView.callJavascript("newData(" + poiArray.toString() + ");");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 	/**
