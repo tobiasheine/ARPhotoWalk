@@ -32,6 +32,11 @@ public class SimpleEyeEmAPI {
 		return NetHelper.URLString2JSONObject(base_url+"albums/radius:"+lat+":"+lon+"/photos"+"?"+client_id+"&includeAlbums=1&limit=20");
 	}
 	
+	public static JSONObject getAlbumsAroundYou(String lat, String lon) {
+		//TODO extract albums
+		return NetHelper.URLString2JSONObject(base_url+"albums?geoSearch=nearbyVenues&lat="+lat+"&lng="+lon+"&"+client_id+"&includeAlbums=1&limit=20");
+	}
 	
+//	http://www.eyeem.com/api/v2/albums?geoSearch=nearbyVenues&lat=52.511233&lng=13.456983
 	
 }
