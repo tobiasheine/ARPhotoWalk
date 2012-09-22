@@ -7,6 +7,7 @@ import org.json.JSONObject;
 public class Album {
 	
 	public String id;
+	public int index;
 	public String name="";
 	public String thumbUrl="";
 	public String type;
@@ -17,6 +18,7 @@ public class Album {
 	{
 		JSONObject object = new JSONObject();
 		object.put("id", this.id);
+		object.put("index", this.index);
 		object.put("name", this.name);
 		object.put("type", this.type);
 		object.put("thumbUrl", this.thumbUrl);

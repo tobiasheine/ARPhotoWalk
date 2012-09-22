@@ -172,9 +172,13 @@ private static final String TAG = MainActivity.class.getSimpleName();
 		this.architectView.load("tutorial1.html");
 		JSONArray poiArray = new JSONArray();
 		
+		int i = 0;
 		for(Album a : albumList){
+			
 			if(a.point !=null && a.type.equals("venue")){
+				a.index = i;
 				poiArray.put(a.toJSONObject());
+				i++;
 			}
 		}
 		
