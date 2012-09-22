@@ -29,7 +29,7 @@ public class SimpleEyeEmAPI {
 	//http://www.eyeem.com/api/v2/albums/radius:52.522044:13.411149/photos&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&detailed=1
 	public static JSONObject getPhotosAroundYou(String lat, String lon) {
 		//TODO extract albums
-		return NetHelper.URLString2JSONObject(base_url+"albums/radius:"+lat+":"+lon+"/photos"+"?"+client_id+"&includeAlbums=1&limit=10");
+		return NetHelper.URLString2JSONObject(base_url+"albums/radius:"+lat+":"+lon+"/photos"+"?"+client_id+"&includeAlbums=1&limit=20");
 	}
 	
 	

@@ -2,7 +2,6 @@ package com.phd.photowalk;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +11,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.phd.photowalk.api.NetHelper;
-import com.wikitude.architect.ArchitectUrlListener;
-import com.wikitude.architect.ArchitectView;
-
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.media.AudioManager;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
+import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.phd.photowalk.api.SimpleEyeEmAPI;
+import com.phd.photowalk.model.Album;
+import com.phd.photowalk.model.Photo;
+import com.wikitude.architect.ArchitectUrlListener;
+import com.wikitude.architect.ArchitectView;
 
 public class MainActivity extends Activity implements ArchitectUrlListener, IFLocationUpdate{
 
@@ -38,7 +38,9 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	
 	
 	private ArchitectView architectView;
-	private List<PoiBean> poiBeanList;
+//	private List<PoiBean> poiBeanList;
+	private List<Album> albumList;
+	private LoadAlbumsAroundYouTask aroundTask;
 	
     /** Called when the activity is first created. */
     @Override
@@ -57,6 +59,8 @@ private static final String TAG = MainActivity.class.getSimpleName();
         }
         setContentView(R.layout.activity_main);
        
+        aroundTask = new LoadAlbumsAroundYouTask();
+        
         //set the devices' volume control to music to be able to change the volume of possible soundfiles to play
         this.setVolumeControlStream( AudioManager.STREAM_MUSIC );
         this.architectView = (ArchitectView) this.findViewById(R.id.architectView);
@@ -145,13 +149,13 @@ private static final String TAG = MainActivity.class.getSimpleName();
 			}
 		}
 		
-		//get the corresponding poi bean for the given id
-		PoiBean bean = poiBeanList.get(Integer.parseInt(id));
-		//start a new intent for displaying the content of the bean
-		Intent intent = new Intent(this, PoiDetailActivity.class);
-		intent.putExtra("POI_NAME", bean.getName());
-		intent.putExtra("POI_DESC", bean.getDescription());
-		this.startActivity(intent);
+//		//get the corresponding poi bean for the given id
+//		PoiBean bean = poiBeanList.get(Integer.parseInt(id));
+//		//start a new intent for displaying the content of the bean
+//		Intent intent = new Intent(this, PoiDetailActivity.class);
+//		intent.putExtra("POI_NAME", bean.getName());
+//		intent.putExtra("POI_DESC", bean.getDescription());
+//		this.startActivity(intent);
 		return true;
 	}
 	
@@ -169,43 +173,58 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	 * creates a definable amount of pois in beancontainers 
 	 * and converts them into a jsonstring that can be sent to the framework
 	 * @throws IOException exception thrown while loading an Architect world
+	 * @throws JSONException 
 	 */
-	private void loadSampleWorld() throws IOException {
+	private void loadSampleWorld() throws IOException, JSONException {
 		this.architectView.load("tutorial1.html");
 
-		poiBeanList = new ArrayList<PoiBean>();
+//		poiBeanList = new ArrayList<PoiBean>();
+		JSONArray poiArray = new JSONArray();
 		
-		final String urlString = "http://www.eyeem.com/api/v2/search?q=berlin&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&includeAlbums=1&limit=10";
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
-				try {
-					JSONArray poiArray = new JSONArray();
-					JSONObject jsonObject = NetHelper.URL2JSONObject(new URL(urlString));
-					JSONObject albums = jsonObject.getJSONObject("albums");
-					JSONArray items = albums.getJSONArray("items");
-
-					for(int i=0; i<10; i++) {
-						JSONObject album = items.getJSONObject(i);
-						JSONObject location = album.optJSONObject("location");
-						
-						if(location!=null) {
-							String lat = (String) location.get("latitude");
-							String lon = (String) location.get("longitude");
-							
-							PoiBean bean = new PoiBean(""+i, "POI #"+i, "Probably one of the best POIs you have ever seen. This is the description of Poi #" +i, (int) (Math.random() * 3), Double.parseDouble(lat), Double.parseDouble(lon), TEST_ALTITUDE + ((Math.random() - 0.5) * 10));
-							poiArray.put(bean.toJSONObject());
-							
-							poiBeanList.add(bean);
-						}
-					}
-						
-					architectView.callJavascript("newData(" + poiArray.toString() + ");");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//		int i = 1;
+		for(Album a : albumList){
+			if(a.point !=null && a.type.equals("venue")){
+//				PoiBean bean = new PoiBean(""+i, "POI #"+i, a.name+" This is the description of Poi #" +i, (int) (Math.random() * 3), a.point.latitude, a.point.longitude, TEST_ALTITUDE + ((Math.random() - 0.5) * 10));
+				poiArray.put(a.toJSONObject());
+//				poiBeanList.add(bean);
+				
+//				i++;
 			}
-		}).start();
+		}
+		
+		architectView.callJavascript("newData(" + poiArray.toString() + ");");
+		
+//		final String urlString = "http://www.eyeem.com/api/v2/search?q=berlin&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&includeAlbums=1&limit=10";
+//		new Thread(new Runnable(){
+//			@Override
+//			public void run() {
+//				try {
+//					JSONArray poiArray = new JSONArray();
+//					JSONObject jsonObject = NetHelper.URL2JSONObject(new URL(urlString));
+//					JSONObject albums = jsonObject.getJSONObject("albums");
+//					JSONArray items = albums.getJSONArray("items");
+//
+//					for(int i=0; i<10; i++) {
+//						JSONObject album = items.getJSONObject(i);
+//						JSONObject location = album.optJSONObject("location");
+//						
+//						if(location!=null) {
+//							String lat = (String) location.get("latitude");
+//							String lon = (String) location.get("longitude");
+//							
+//							PoiBean bean = new PoiBean(""+i, "POI #"+i, "Probably one of the best POIs you have ever seen. This is the description of Poi #" +i, (int) (Math.random() * 3), Double.parseDouble(lat), Double.parseDouble(lon), TEST_ALTITUDE + ((Math.random() - 0.5) * 10));
+//							poiArray.put(bean.toJSONObject());
+//							
+//							poiBeanList.add(bean);
+//						}
+//					}
+//						
+//					architectView.callJavascript("newData(" + poiArray.toString() + ");");
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}).start();
 	}
 
 	/**
@@ -215,18 +234,61 @@ private static final String TAG = MainActivity.class.getSimpleName();
 
 	@Override
 	public void sendLocation(float lat, float lon, float accuracy) {
-		// TODO Auto-generated method stub
 		if(this.architectView != null){
-//			this.architectView.setLocation(lat, lon, accuracy);
-			((PHDApplication)getApplication()).setLocationUpdater(null);
+			this.architectView.setLocation(lat, lon, accuracy);
+//			((PHDApplication)getApplication()).setLocationUpdater(null);
+			if(aroundTask.getStatus() == Status.PENDING)
+				aroundTask.execute(lat,lon);
+		}
+			
+	}
+	
+	
+	
+	private class LoadAlbumsAroundYouTask extends AsyncTask<Float, Void, Void>{
+		
+		@Override
+		protected Void doInBackground(Float... params) {
+			albumList = new ArrayList<Album>();
+			
+			List<Photo> photoList = new ArrayList<Photo>();
+			
+			JSONObject json = SimpleEyeEmAPI.getPhotosAroundYou(""+params[0], ""+params[1]);
+			
+			try{
+				json = json.getJSONObject("photos");
+				
+				JSONArray photos = null; 
+				photos = json.getJSONArray("items");
+				
+				for (int i = 0; i < photos.length(); i++) {
+					JSONObject photo = photos.getJSONObject(i);
+					photoList.add(Photo.parsePhoto(photo));
+				}
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			for(Photo p : photoList){
+				for(Album a : p.albums){
+					if(!albumList.contains(a))
+						albumList.add(a);
+				}
+			}
+			
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
 			try {
 				loadSampleWorld();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-			
 	}
 	
 }
