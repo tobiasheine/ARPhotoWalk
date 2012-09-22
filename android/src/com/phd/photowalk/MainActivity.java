@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -38,7 +37,6 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	
 	
 	private ArchitectView architectView;
-//	private List<PoiBean> poiBeanList;
 	private List<Album> albumList;
 	private LoadAlbumsAroundYouTask aroundTask;
 	
@@ -66,11 +64,6 @@ private static final String TAG = MainActivity.class.getSimpleName();
         this.architectView = (ArchitectView) this.findViewById(R.id.architectView);
         //onCreate method for setting the license key for the SDK
         architectView.onCreate(apiKey);
-        
-        //in order to inform the ARchitect framework about the user's location Androids LocationManager is used in this case
-        //NOT USED IN THIS EXAMPLE
-        //locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        //locManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, this);
         
         ((PHDApplication)getApplication()).setLocationUpdater(this);
      }
@@ -175,56 +168,18 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	 * @throws IOException exception thrown while loading an Architect world
 	 * @throws JSONException 
 	 */
-	private void loadSampleWorld() throws IOException, JSONException {
+	private void loadWorld() throws IOException, JSONException {
 		this.architectView.load("tutorial1.html");
-
-//		poiBeanList = new ArrayList<PoiBean>();
 		JSONArray poiArray = new JSONArray();
 		
-//		int i = 1;
 		for(Album a : albumList){
 			if(a.point !=null && a.type.equals("venue")){
-//				PoiBean bean = new PoiBean(""+i, "POI #"+i, a.name+" This is the description of Poi #" +i, (int) (Math.random() * 3), a.point.latitude, a.point.longitude, TEST_ALTITUDE + ((Math.random() - 0.5) * 10));
 				poiArray.put(a.toJSONObject());
-//				poiBeanList.add(bean);
-				
-//				i++;
 			}
 		}
 		
 		architectView.callJavascript("newData(" + poiArray.toString() + ");");
 		
-//		final String urlString = "http://www.eyeem.com/api/v2/search?q=berlin&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&includeAlbums=1&limit=10";
-//		new Thread(new Runnable(){
-//			@Override
-//			public void run() {
-//				try {
-//					JSONArray poiArray = new JSONArray();
-//					JSONObject jsonObject = NetHelper.URL2JSONObject(new URL(urlString));
-//					JSONObject albums = jsonObject.getJSONObject("albums");
-//					JSONArray items = albums.getJSONArray("items");
-//
-//					for(int i=0; i<10; i++) {
-//						JSONObject album = items.getJSONObject(i);
-//						JSONObject location = album.optJSONObject("location");
-//						
-//						if(location!=null) {
-//							String lat = (String) location.get("latitude");
-//							String lon = (String) location.get("longitude");
-//							
-//							PoiBean bean = new PoiBean(""+i, "POI #"+i, "Probably one of the best POIs you have ever seen. This is the description of Poi #" +i, (int) (Math.random() * 3), Double.parseDouble(lat), Double.parseDouble(lon), TEST_ALTITUDE + ((Math.random() - 0.5) * 10));
-//							poiArray.put(bean.toJSONObject());
-//							
-//							poiBeanList.add(bean);
-//						}
-//					}
-//						
-//					architectView.callJavascript("newData(" + poiArray.toString() + ");");
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}).start();
 	}
 
 	/**
@@ -236,30 +191,24 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	public void sendLocation(float lat, float lon, float accuracy) {
 		if(this.architectView != null){
 			this.architectView.setLocation(lat, lon, accuracy);
-//			((PHDApplication)getApplication()).setLocationUpdater(null);
 			if(aroundTask.getStatus() == Status.PENDING)
 				aroundTask.execute(lat,lon);
 		}
-			
 	}
-	
-	
 	
 	private class LoadAlbumsAroundYouTask extends AsyncTask<Float, Void, Void>{
 		
 		@Override
 		protected Void doInBackground(Float... params) {
 			albumList = new ArrayList<Album>();
-			
 			List<Photo> photoList = new ArrayList<Photo>();
-			
-			JSONObject json = SimpleEyeEmAPI.getPhotosAroundYou(""+params[0], ""+params[1]);
+			JSONObject jsonPhotoObject = SimpleEyeEmAPI.getPhotosAroundYou(""+params[0], ""+params[1]);
 			
 			try{
-				json = json.getJSONObject("photos");
+				jsonPhotoObject = jsonPhotoObject.getJSONObject("photos");
 				
 				JSONArray photos = null; 
-				photos = json.getJSONArray("items");
+				photos = jsonPhotoObject.getJSONArray("items");
 				
 				for (int i = 0; i < photos.length(); i++) {
 					JSONObject photo = photos.getJSONObject(i);
@@ -272,7 +221,15 @@ private static final String TAG = MainActivity.class.getSimpleName();
 			
 			for(Photo p : photoList){
 				for(Album a : p.albums){
-					if(!albumList.contains(a))
+					boolean addAlbum = true;
+					
+					//check for duplicates
+					for(Album b : albumList){
+						if(b.id.equals(a.id))
+							addAlbum = false;
+					}
+						
+					if(addAlbum)
 						albumList.add(a);
 				}
 			}
@@ -283,9 +240,8 @@ private static final String TAG = MainActivity.class.getSimpleName();
 		@Override
 		protected void onPostExecute(Void result) {
 			try {
-				loadSampleWorld();
+				loadWorld();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
