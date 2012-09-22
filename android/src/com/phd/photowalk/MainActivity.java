@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements ArchitectUrlListener, LocationListener{
+public class MainActivity extends Activity implements ArchitectUrlListener, IFLocationUpdate{
 
 private static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -35,8 +35,6 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	
 	
 	private ArchitectView architectView;
-	private LocationManager locManager;
-	private Location loc;
 	private List<PoiBean> poiBeanList;
 	
     /** Called when the activity is first created. */
@@ -66,6 +64,8 @@ private static final String TAG = MainActivity.class.getSimpleName();
         //NOT USED IN THIS EXAMPLE
         //locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         //locManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, this);
+        
+        ((PHDApplication)getApplication()).setLocationUpdater(this);
      }
     
     @Override
@@ -79,12 +79,12 @@ private static final String TAG = MainActivity.class.getSimpleName();
     	//register this activity as handler of "architectsdk://" urls
     	this.architectView.registerUrlListener(this);
     	
-    	try {
-			loadSampleWorld();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//    	try {
+//			loadSampleWorld();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
     }
     
@@ -194,34 +194,21 @@ private static final String TAG = MainActivity.class.getSimpleName();
 	 * listener method called when the location of the user has changed
 	 * used for informing the ArchitectView about a new location of the user
 	 */
-	@Override
-	public void onLocationChanged(Location loc) {
-		// IMPORTANT: 
-		// use this method for informing the SDK about a location change by the user
-		// for simplicity not used in this example
-		
-		//inform ArchitectView about location changes
-		//if(this.architectView != null)
-		//	this.architectView.setLocation((float)(loc.getLatitude()), (float)(loc.getLongitude()), loc.getAccuracy());
-	}
 
 	@Override
-	public void onProviderDisabled(String provider) {
+	public void sendLocation(float lat, float lon, float accuracy) {
 		// TODO Auto-generated method stub
-		
+		if(this.architectView != null){
+//			this.architectView.setLocation(lat, lon, accuracy);
+			((PHDApplication)getApplication()).setLocationUpdater(null);
+			try {
+				loadSampleWorld();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
 	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 }

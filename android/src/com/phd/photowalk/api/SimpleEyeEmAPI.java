@@ -11,14 +11,27 @@ import org.json.JSONObject;
  */
 public class SimpleEyeEmAPI {
 	private static String client_id="client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS";
-
-
-	public static JSONObject getObjectForURLFrag(String frag) {
-		return NetHelper.URLString2JSONObject("https://www.eyeem.com/api/v2/" + frag +"?"+client_id);
-	}
+	private static String base_url="https://www.eyeem.com/api/v2/";
 
 	public static JSONObject getPhotoObject(String photo_id) {
-		return getObjectForURLFrag("photos/"+photo_id);
+		return NetHelper.URLString2JSONObject(base_url+"photos/"+photo_id+"?"+client_id);
 	}
+	
+	public static JSONObject getAlbumObject(String album_id) {
+		return NetHelper.URLString2JSONObject(base_url+"albums/"+album_id+"?"+client_id);
+	}
+	
+	public static JSONObject searchAlbums(String search) {
+		//TODO extract albums
+		return NetHelper.URLString2JSONObject(base_url+"search?="+search+"&"+client_id);
+	}
+	
+	//http://www.eyeem.com/api/v2/albums/radius:52.522044:13.411149/photos&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&detailed=1
+	public static JSONObject getPhotosAroundYou(String lat, String lon) {
+		//TODO extract albums
+		return NetHelper.URLString2JSONObject(base_url+"albums/radius:"+lat+":"+lon+"/photos"+"?"+client_id+"&includeAlbums=1&limit=10");
+	}
+	
+	
 	
 }

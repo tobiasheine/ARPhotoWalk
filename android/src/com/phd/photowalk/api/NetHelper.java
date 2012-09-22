@@ -21,7 +21,6 @@ import org.json.JSONObject;
 public class NetHelper {
 
 	
-	//use this string http://www.eyeem.com/api/v2/search?q=berlin&client_id=QATAfrOjakwFGyoHPTLSmoG8KJAWj6fS&includeAlbums=1&limit=10
 	public static String downloadURL2String(URL url) {
 
 		URLConnection con;
