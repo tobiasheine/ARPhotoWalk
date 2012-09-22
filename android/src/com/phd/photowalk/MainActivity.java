@@ -200,7 +200,40 @@ private static final String TAG = MainActivity.class.getSimpleName();
 		}
 	}
 	
-	private class LoadAlbumsAroundYouTask extends AsyncTask<Float, Void, Void>{
+	private class LoadAlbumsAroundYouTask extends AsyncTask<Float, Void, Void> {
+		@Override
+		protected Void doInBackground(Float... params) {
+			albumList = new ArrayList<Album>();
+			JSONObject jsonAlbumsObject = SimpleEyeEmAPI.getAlbumsAroundYou(""+params[0], ""+params[1]);
+			
+			try{
+				jsonAlbumsObject = jsonAlbumsObject.getJSONObject("albums");
+				
+				JSONArray albums = null; 
+				albums = jsonAlbumsObject.getJSONArray("items");
+				
+				for (int i = 0; i < albums.length(); i++) {
+					JSONObject album = albums.getJSONObject(i);
+					albumList.add(Album.parseAlbum(album));
+				}
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			try {
+				loadWorld();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private class LoadShittyAlbumsAroundYouTask extends AsyncTask<Float, Void, Void>{
 		
 		@Override
 		protected Void doInBackground(Float... params) {
