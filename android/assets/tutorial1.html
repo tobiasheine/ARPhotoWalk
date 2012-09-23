@@ -114,7 +114,7 @@
                     // hide the bubble
                     document.getElementById("footer").style.display = 'block';
                     document.getElementById("poiName").innerHTML=jsonObject[id].name;
-                    document.getElementById("totalPhotos").innerHTML=jsonObject[id].totalPhotos;
+                    document.getElementById("totalPhotos").innerHTML="has " + jsonObject[id].totalPhotos + " Photos..";
                     document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(id);
                     
                     // reset the previous selected poi
