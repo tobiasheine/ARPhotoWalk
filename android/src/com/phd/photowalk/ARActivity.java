@@ -24,7 +24,7 @@ public class ARActivity extends Activity implements ArchitectUrlListener, IFLoca
 
 	private String apiKey = "nKc9NtnrpQJ/aUtTDoy50t5ndV9zjuslj3B8xcHgvKoBAl6n/e2UznDNPlyBCFxKr2ffCR01ucmHm+xLEAJj0FQdT0u8Jr5rKKobj7gBNl/xCrlBWRXUfdiCctXwQBWTKJuuUmErhvqCgp3QWqDUeDHnQKIpc+yDBNko6qp78A5TYWx0ZWRfX+ZSlAflWlVhPNJvdcOBPOJNtNC0TVO8WFAmrJsgkAdu4diK0QVd15faK/HrbJFtIXyrB3KFGc7sbBvfPwDtHVBkSfzCZSsY1Sdb3lZ02UphzYrFNiblTjsUz96Ss6IfxwgExhw7nyZ2MFJYWZ824STK3Tb2PxrhWsrRqq4fcCM7fjd6XRYMvTbOn6pCq/0aBh9009S9+76O1NIGAsq+kEUguMRM+TVpc+QZeTQS82OLxEJY7DrmQQ2OHEKuZVu7/xGix3V3VFeL4//zWC+WMXDTbRWoJyfwfn8xkU5p3CiMbxOdHIZZw5AWFmVeCu8SUN6DEnymMX+PlHxR2h229hT5Q/VtQTdN4kEEKE+d82I9bNUM1dFBy9uyNGXuaNjQfZaHonj5eVG53pvq0JJIlE9X2Rr/BEHglhmvpRINSZnCHYNyBxkCaVnI5uZ7K5mJOMhBKRkUDW72lNDhrLM6l2LdQyw0AN4wxfyLoXeRrRW5JWL7GYCciTgaDOOmVSVSgTKvQ//jPBh7";
 	private ArchitectView architectView;
-	private PHDApplication app;
+	private PWalkApplication app;
 	public static final String EXTRA_CATEGORY = "category";
 	private int category;
 	
@@ -33,7 +33,7 @@ public class ARActivity extends Activity implements ArchitectUrlListener, IFLoca
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
-		app = (PHDApplication) getApplication();
+		app = (PWalkApplication) getApplication();
 		
 		this.getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN );
         
@@ -54,7 +54,7 @@ public class ARActivity extends Activity implements ArchitectUrlListener, IFLoca
         //onCreate method for setting the license key for the SDK
         architectView.onCreate(apiKey);
         
-        ((PHDApplication)getApplication()).setLocationUpdater(this);
+        ((PWalkApplication)getApplication()).setLocationUpdater(this);
 	}
 
 	@Override
@@ -83,8 +83,8 @@ public class ARActivity extends Activity implements ArchitectUrlListener, IFLoca
 		super.onResume();
 
 		this.architectView.onResume();
-		if(((PHDApplication)getApplication()).getLastKnownLocation()!=null)
-			this.architectView.setLocation(((PHDApplication)getApplication()).getLastKnownLocation().getLatitude(), ((PHDApplication)getApplication()).getLastKnownLocation().getLongitude(), ((PHDApplication)getApplication()).getLastKnownLocation().getAltitude(),1f);
+		if(((PWalkApplication)getApplication()).getLastKnownLocation()!=null)
+			this.architectView.setLocation(((PWalkApplication)getApplication()).getLastKnownLocation().getLatitude(), ((PWalkApplication)getApplication()).getLastKnownLocation().getLongitude(), ((PWalkApplication)getApplication()).getLastKnownLocation().getAltitude(),1f);
 
 	}
     @Override

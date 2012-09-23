@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.sax.StartElementListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.phd.photowalk.FullscreenPhoto;
-import com.phd.photowalk.PHDApplication;
+import com.phd.photowalk.PWalkApplication;
 import com.phd.photowalk.model.Photo;
 
 public class PhotoGridColumnAdapter extends BaseAdapter
@@ -44,13 +43,6 @@ public class PhotoGridColumnAdapter extends BaseAdapter
 	public Object getItem(int position) {
 		return list.get(position);
 	}
-
-	
-	@Override
-	public void notifyDataSetChanged() {
-		// TODO Auto-generated method stub
-		super.notifyDataSetChanged();
-	}
 	
 	@Override
 	public long getItemId(int position) {
@@ -59,7 +51,7 @@ public class PhotoGridColumnAdapter extends BaseAdapter
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		int height=(int) (((PHDApplication)activity.getApplication()).mScreenDensity*102);
+		int height=(int) (((PWalkApplication)activity.getApplication()).mScreenDensity*102);
 		
 		LinearLayout lin=new LinearLayout(activity);
 		lin.setOrientation(LinearLayout.HORIZONTAL);
@@ -96,12 +88,12 @@ public class PhotoGridColumnAdapter extends BaseAdapter
 	
 	private ImageLoader getImageLoader() {
 		
-		img_loader = ((PHDApplication)activity.getApplication()).getImageLoader();
+		img_loader = ((PWalkApplication)activity.getApplication()).getImageLoader();
 		if (img_loader==null) {
 			img_loader = ImageLoader.getInstance();
 			img_loader.init(ImageLoaderHelper.getConfiguration(activity));
 		}
-		((PHDApplication)activity.getApplication()).setImageLoader(img_loader);
+		((PWalkApplication)activity.getApplication()).setImageLoader(img_loader);
 		return img_loader;
 	}
 }

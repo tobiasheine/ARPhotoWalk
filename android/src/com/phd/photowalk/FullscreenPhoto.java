@@ -10,14 +10,14 @@ import com.phd.photowalk.widgets.ImageLoaderHelper;
 public class FullscreenPhoto extends Activity {
 	
 	private ImageLoader img_loader=null;
-	private PHDApplication ac;
+	private PWalkApplication ac;
 	public final static String EXTRA_FILENAME = "filename";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.photowidget_fullscreen);
-		ac = (PHDApplication) getApplication();
+		ac = (PWalkApplication) getApplication();
 		ImageView photoImageView = (ImageView) findViewById(R.id.fullscreen_image);
 		Bundle extras = getIntent().getExtras();
 	
@@ -25,13 +25,13 @@ public class FullscreenPhoto extends Activity {
 	}
 
 	public ImageLoader getImageLoader() {
-		img_loader = ((PHDApplication)getApplicationContext()).getImageLoader();
+		img_loader = ((PWalkApplication)getApplicationContext()).getImageLoader();
 		if (img_loader==null) {
 			img_loader = ImageLoader.getInstance();
 			// Initialize ImageLoader with configuration. Do it once.
 			img_loader.init(ImageLoaderHelper.getConfiguration(this));
 		}
-		((PHDApplication)getApplicationContext()).setImageLoader(img_loader);
+		((PWalkApplication)getApplicationContext()).setImageLoader(img_loader);
 		return img_loader;
 	}
 	

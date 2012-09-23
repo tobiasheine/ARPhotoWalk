@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,7 +16,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +29,7 @@ import com.phd.photowalk.model.Album;
 import com.phd.photowalk.widgets.ActionBar;
 
 public class MainActivity extends Activity implements IFLocationUpdate/*, ArchitectUrlListener*/{
-	private PHDApplication app;
+	private PWalkApplication app;
 	private LoadAlbumsAroundYouTask aroundTask;
 	
 	public static final String FOOD = "Restaurants, Italian Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream, Pizza Place, Korean Restaurant";
@@ -59,7 +59,7 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        app = (PHDApplication) getApplication();
+        app = (PWalkApplication) getApplication();
         setContentView(R.layout.main);
         
         actionBar = (ActionBar) findViewById(R.id.actionbar);
@@ -102,7 +102,7 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	
 	private void setCategories(){
 		for(Album album : app.albumList){
-			Iterator it = categoryMap.entrySet().iterator();
+			Iterator<Entry<Integer, String>> it = categoryMap.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry<Integer, String> pairs = (Map.Entry<Integer, String>)(it.next());
 				if(pairs.getValue().contains(album.venueType) && album.venueType.length() > 0){
@@ -160,7 +160,6 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 
 		public TagAdapter(Context context, int textViewResourceId) {
 			super(context, textViewResourceId);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -195,28 +194,25 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	private String getTextforAdapter(Integer category){
 		switch (category) {
 			case CATEGORY_CAFE:
-				return numCategories[category]+" places to drink a nice coffee?";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to drink a nice coffee?";
 			
 			case CATEGORY_CHILL:
-				return numCategories[category]+" places to chill out.";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to chill out.";
 				
 			case CATEGORY_DRINK:
-				return numCategories[category]+" places to get drunk.";
-			
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to get drunk.";
 			
 			case CATEGORY_FOOD:
-				return numCategories[category]+" places to get some food.";
-			
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to get some food.";
 			
 			case CATEGORY_PARTY:
-				return numCategories[category]+" places to party until sunrise";
-				
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to party until sunrise";
 				
 			case CATEGORY_SHOP:
-				return numCategories[category]+" places to buy something?";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to buy something?";
 			
 			case CATEGORY_WORK:
-				return numCategories[category]+" places to get some money!";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to get some money!";
 
 		default:
 			break;

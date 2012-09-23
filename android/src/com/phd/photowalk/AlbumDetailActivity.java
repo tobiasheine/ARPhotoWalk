@@ -23,13 +23,11 @@ public class AlbumDetailActivity extends Activity {
 	private String albumId;
 	private PhotoGridColumnAdapter adapter;
 	private ListView list;
-	private PHDApplication app;
 	private ActionBar actionBar;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (PHDApplication) getApplication();
 		setContentView(R.layout.album_detail);
 		list = (ListView) findViewById(R.id.photolist);
 		
@@ -38,7 +36,7 @@ public class AlbumDetailActivity extends Activity {
 		
 		
 		albumId = getIntent().getStringExtra(EXTA_ALBUM_ID);
-		splitter = new Photo2ColumnSplitter((PHDApplication) getApplication());
+		splitter = new Photo2ColumnSplitter((PWalkApplication) getApplication());
 		
 		new LoadAlbumPhotosTask().execute(albumId);
 	}
