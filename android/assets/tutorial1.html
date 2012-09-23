@@ -59,9 +59,11 @@
             // Tutorial code using the ARchitect Javascript library
             
             // Create new images, which will be loaded right away
-            firstImage = new AR.ImageResource("marker1.png", {onError: errorLoadingImage});
-            secondImage = new AR.ImageResource("marker2.png", {onError: errorLoadingImage});
-            thirdImage = new AR.ImageResource("marker3.png", {onError: errorLoadingImage});
+			var indiImg = new AR.ImageResource("indicator.png");
+			
+			var indiDrawable = new AR.ImageDrawable(indiImg, 0.1, {
+    			verticalAnchor: AR.CONST.VERTICAL_ANCHOR.TOP
+			});
             
             AR.radar.background = new AR.ImageResource("circle.png");
         	AR.radar.positionX = 0.1;
@@ -129,15 +131,15 @@
                         selectedObject.img.scaling = 1.0;
                         selectedObject.poiObj.renderingOrder = 0;
                         selectedObject.poiObj.drawables.radar = radarCircle;
+                        selectedObject.poiObj.drawables.indicator = [];
                     }
                     
                     // set a new select status for the current selected poi
                     selectedObject = jsonObject[id];
                     selectedObject.arLabel.style.backgroundColor = '#FFFFFFFF';
                     selectedObject.poiObj.renderingOrder = 1;
-                    
                     selectedObject.poiObj.drawables.radar = selectedRadarCircle;
-                    
+                    selectedObject.poiObj.drawables.indicator = indiDrawable;
                     
                     // start the assigned animation
                     selectedObject.animation.start();
