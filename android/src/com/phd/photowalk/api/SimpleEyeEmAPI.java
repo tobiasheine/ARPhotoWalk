@@ -34,7 +34,7 @@ public class SimpleEyeEmAPI {
 	
 	public static JSONObject getAlbumsAroundYou(String lat, String lon) {
 		//TODO extract albums
-		return NetHelper.URLString2JSONObject(base_url+"albums?geoSearch=nearbyVenues&lat="+lat+"&lng="+lon+"&"+client_id+"&includeAlbums=1&limit=40&radius=0.2");
+		return NetHelper.URLString2JSONObject(base_url+"albums?geoSearch=nearbyVenues&lat="+lat+"&lng="+lon+"&"+client_id+"&includeAlbums=1&limit=20&radius=0.2");
 	}
 	
 	public static JSONObject getAlbumsPhotos(String albumId) {

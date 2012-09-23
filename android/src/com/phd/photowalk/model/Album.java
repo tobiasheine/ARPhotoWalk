@@ -13,7 +13,7 @@ public class Album {
 	public String type;
 	public int totalPhotos, totalLikers, totalContributors;
 	public String venueType="";
-	public int category;
+	public int category=-1;
 	public Point point;
 	
 	public JSONObject toJSONObject() throws JSONException

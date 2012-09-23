@@ -4,6 +4,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+ 
+ <com.phd.photowalk.widgets.ActionBar
+    	android:id="@+id/actionbar"
+    	android:layout_width="fill_parent"
+    	android:layout_height="70dp"    
+	/>
+ 
  <ListView 
      android:id="@+id/photolist"
      android:layout_width="fill_parent"

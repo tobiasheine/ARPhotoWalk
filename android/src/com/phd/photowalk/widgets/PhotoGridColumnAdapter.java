@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.Vector;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.sax.StartElementListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -13,6 +16,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.phd.photowalk.FullscreenPhoto;
 import com.phd.photowalk.PHDApplication;
 import com.phd.photowalk.model.Photo;
 
@@ -60,13 +64,24 @@ public class PhotoGridColumnAdapter extends BaseAdapter
 		LinearLayout lin=new LinearLayout(activity);
 		lin.setOrientation(LinearLayout.HORIZONTAL);
 			
-		for ( Photo act_pic : list.get(position)) {
+		for ( final Photo act_pic : list.get(position)) {
 
 			ImageView img_v=new ImageView(activity);
 			img_v.setLayoutParams(new LinearLayout.LayoutParams((int)(act_pic.getAspectRatio()*height),height));
 			img_v.setScaleType(ScaleType.CENTER_CROP);
 			img_v.setPadding(5, 5, 5, 5);
 			getImageLoader().displayImage(getThumbnailPathByHeight(height,act_pic),img_v,ImageLoaderHelper.getOptions());
+			
+			img_v.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent fullscreen = new Intent(activity,FullscreenPhoto.class);
+					fullscreen.putExtra(FullscreenPhoto.EXTRA_FILENAME, act_pic.filename);
+					activity.startActivity(fullscreen);
+				}
+			});
+			
 			lin.addView(img_v);
 		}
 		
