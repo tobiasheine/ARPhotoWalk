@@ -160,8 +160,12 @@ public class ARActivity extends Activity implements ArchitectUrlListener, IFLoca
 	
 	@Override
 	public void sendLocation(float lat, float lon, float accuracy) {
-		if(this.architectView != null){
-			this.architectView.setLocation(lat, lon, accuracy);
+		try{
+			if(this.architectView != null){
+				this.architectView.setLocation(lat, lon, accuracy);
+			}
+		}catch (Exception e) {
+			 
 		}
 	}
 }

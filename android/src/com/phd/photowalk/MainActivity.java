@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	private PHDApplication app;
 	private LoadAlbumsAroundYouTask aroundTask;
 	
-	public static final String FOOD = "Restaurants, Italien Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream";
+	public static final String FOOD = "Restaurants, Italian Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream";
 	public static final String DRINK = "Bars, Pub, Cocktail Bar";
 	public static final String CHILL = "Parks, Garden";
 	public static final String PARTY = "Rock Club, Concert Hall";
