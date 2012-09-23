@@ -40,7 +40,7 @@ public class Photo{
 		photo.width = json.optInt("width");
 		photo.height = json.optInt("height");
 		photo.thumbUrl = json.optString("thumbUrl");
-		photo.filename = json.optString("filename");
+		photo.filename = photo.thumbUrl.substring(33);
 		photo.caption = json.optString("caption");
 		photo.title = json.optString("title");
 		

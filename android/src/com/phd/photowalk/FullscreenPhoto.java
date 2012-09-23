@@ -1,10 +1,7 @@
 package com.phd.photowalk;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -15,8 +12,6 @@ public class FullscreenPhoto extends Activity {
 	private ImageLoader img_loader=null;
 	private PHDApplication ac;
 	public final static String EXTRA_FILENAME = "filename";
-	
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +40,7 @@ public class FullscreenPhoto extends Activity {
 	}
 	
 	public static String getThumbnailPathByWidth(int width,String filename) {
-		return "http://www.eyeem.com/api/v2/" + "w/" + width +"/"+ filename;
+		return "http://www.eyeem.com/thumb/" + "w/" + width +"/"+ filename;
 	}
 	
 	
