@@ -33,8 +33,13 @@
             </intent-filter>
         </activity>
         
-         <activity
+        <activity
             android:name=".AlbumDetailActivity"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        
+        <activity
+            android:name=".ARActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
         </activity>
     </application>

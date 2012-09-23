@@ -1,6 +1,9 @@
 package com.phd.photowalk;
 
+import java.util.List;
+
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.phd.photowalk.model.Album;
 
 import android.app.Application;
 import android.content.Context;
@@ -17,6 +20,7 @@ public class PHDApplication extends Application implements LocationListener{
 	public float mScreenDensity;
 	public int mDeviceWidth;
 	private ImageLoader mLoader = null;
+	public List<Album> albumList=null;
 	
 	@Override
 	public void onCreate() {

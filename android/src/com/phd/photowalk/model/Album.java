@@ -12,6 +12,8 @@ public class Album {
 	public String thumbUrl="";
 	public String type;
 	public int totalPhotos, totalLikers, totalContributors;
+	public String venueType="";
+	public int category;
 	public Point point;
 	
 	public JSONObject toJSONObject() throws JSONException
@@ -25,6 +27,7 @@ public class Album {
 		object.put("totalPhotos", this.totalPhotos);
 		object.put("totalLikers", this.totalLikers);
 		object.put("totalContributors", this.totalContributors);
+		object.put("category", this.category);
 		object.put("Point", this.point.toJSONString());
 		
 		return object;
@@ -41,10 +44,13 @@ public class Album {
 		album.totalLikers = json.optInt("totalLikers");
 		album.totalContributors = json.optInt("totalContributors");
 		
-		
 		JSONObject loc = json.optJSONObject("location");
 		if( loc != null){
 			album.point = new Point(Float.valueOf(loc.getString("latitude")), Float.valueOf(loc.getString("longitude")), 150);
+			
+			JSONObject venueService = loc.optJSONObject("venueService");
+			if(venueService != null && venueService.has("categoryName"))
+					album.venueType = venueService.getString("categoryName");
 		}
 		
 		return album; 
