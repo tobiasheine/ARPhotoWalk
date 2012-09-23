@@ -34,7 +34,7 @@ public class AlbumDetailActivity extends Activity {
 		list = (ListView) findViewById(R.id.photolist);
 		
 		actionBar = (ActionBar) findViewById(R.id.actionbar);
-		actionBar.setTitle("Album Photos");
+		actionBar.setTitle("What's going on here?!");
 		
 		
 		albumId = getIntent().getStringExtra(EXTA_ALBUM_ID);
