@@ -95,10 +95,10 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 			Iterator it = categoryMap.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry<Integer, String> pairs = (Map.Entry<Integer, String>)(it.next());
-				if(pairs.getValue().contains(album.venueType))
+				if(pairs.getValue().contains(album.venueType) && album.venueType.length() > 0)
 					album.category = pairs.getKey();
 				
-				if(!availableCategories.contains(album.category))
+				if(!availableCategories.contains(album.category) && album.category != -1)
 					availableCategories.add(album.category);
 				
 			}
