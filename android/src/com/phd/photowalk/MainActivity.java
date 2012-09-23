@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.phd.photowalk.api.SimpleEyeEmAPI;
 import com.phd.photowalk.model.Album;
+import com.phd.photowalk.widgets.ActionBar;
 
 public class MainActivity extends Activity implements IFLocationUpdate/*, ArchitectUrlListener*/{
 	private PHDApplication app;
@@ -46,8 +48,12 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	public static final int CATEGORY_WORK=5;
 	public static final int CATEGORY_SHOP=6;
 	
+	private int[] numCategories = new int[7];
+	
 	private List<String> categories;
 	private List<Integer> availableCategories;
+	
+	private ActionBar actionBar;
 	
 	private HashMap<Integer, String> categoryMap;
     @Override
@@ -55,6 +61,10 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
         super.onCreate(savedInstanceState);
         app = (PHDApplication) getApplication();
         setContentView(R.layout.main);
+        
+        actionBar = (ActionBar) findViewById(R.id.actionbar);
+        actionBar.setTitle("What we found around you: ");
+        
         aroundTask = new LoadAlbumsAroundYouTask();
         
         categories = new ArrayList<String>();
@@ -95,8 +105,10 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 			Iterator it = categoryMap.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry<Integer, String> pairs = (Map.Entry<Integer, String>)(it.next());
-				if(pairs.getValue().contains(album.venueType) && album.venueType.length() > 0)
+				if(pairs.getValue().contains(album.venueType) && album.venueType.length() > 0){
 					album.category = pairs.getKey();
+					numCategories[pairs.getKey()]++;
+				}
 				
 				if(!availableCategories.contains(album.category) && album.category != -1)
 					availableCategories.add(album.category);
@@ -107,6 +119,12 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	}
 	
 	private class LoadAlbumsAroundYouTask extends AsyncTask<Float, Void, Void> {
+		
+		@Override
+		protected void onPreExecute() {
+			actionBar.setBusy(true);
+		}
+		
 		@Override
 		protected Void doInBackground(Float... params) {
 			app.albumList = new ArrayList<Album>();
@@ -132,8 +150,8 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 		@Override
 		protected void onPostExecute(Void result) {
 			setCategories();
-			
 			((ListView)findViewById(R.id.tagList)).setAdapter(new TagAdapter(MainActivity.this, android.R.id.title));
+			actionBar.setBusy(false);
 		}
 	}
 	
@@ -149,12 +167,12 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 		public View getView(int position, View convertView, ViewGroup parent) {
 			final Integer category = availableCategories.get(position);
 			
-			TextView title = new TextView(MainActivity.this);
-			title.setText(getTextforAdapter(category));
-			title.setPadding(20, 20, 20, 20);
-			title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+			convertView = LayoutInflater.from(MainActivity.this).inflate(R.layout.places_adapter, null);
 			
-			title.setOnClickListener(new OnClickListener() {
+			TextView title = (TextView) convertView.findViewById(R.id.title);
+			title.setText(getTextforAdapter(category));
+			
+			convertView.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
@@ -164,7 +182,7 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 				}
 			});
 			
-			return title;
+			return convertView;
 		}
 		
 		@Override
@@ -177,28 +195,28 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	private String getTextforAdapter(Integer category){
 		switch (category) {
 			case CATEGORY_CAFE:
-				return "Looking for a nice coffee?";
+				return numCategories[category]+" places to drink a nice coffee?";
 			
 			case CATEGORY_CHILL:
-				return "Looking for a place to relaxe?";
+				return numCategories[category]+" places to chill out.";
 				
 			case CATEGORY_DRINK:
-				return "Wanna get hammered?";
+				return numCategories[category]+" places to get drunk.";
 			
 			
 			case CATEGORY_FOOD:
-				return "Need fooood!!!!";
+				return numCategories[category]+" places to get some food.";
 			
 			
 			case CATEGORY_PARTY:
-				return "Gimme some music";
+				return numCategories[category]+" places to party until sunrise";
 				
 				
 			case CATEGORY_SHOP:
-				return "Lets waste money";
+				return numCategories[category]+" places to buy something?";
 			
 			case CATEGORY_WORK:
-				return "Gimme some work, I need money!";
+				return numCategories[category]+" places to get some money!";
 
 		default:
 			break;

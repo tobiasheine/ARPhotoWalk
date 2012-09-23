@@ -26,19 +26,19 @@
         android:text="AlbumTitle"
         android:gravity="center_vertical"/>
     
-	<ImageButton 
+	<!-- ImageButton 
 	    android:id="@+id/refresh"
 	    android:layout_width="wrap_content"
 	    android:layout_height="fill_parent"
 	    android:src="@drawable/refresh"
 	    android:background="@android:color/transparent"
 	    android:layout_alignParentRight="true"
-	    />    
+	    / -->    
     
     <ProgressBar 
         android:id="@+id/actionbar:progress"
         android:padding="5dp"
-        android:layout_toLeftOf="@id/refresh"
+        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

@@ -6,17 +6,15 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.phd.photowalk.api.SimpleEyeEmAPI;
-import com.phd.photowalk.model.Album;
-import com.phd.photowalk.model.Photo;
-import com.phd.photowalk.widgets.ActionBar;
-import com.phd.photowalk.widgets.PhotoGridColumnAdapter;
-
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ListView;
+
+import com.phd.photowalk.api.SimpleEyeEmAPI;
+import com.phd.photowalk.model.Photo;
+import com.phd.photowalk.widgets.ActionBar;
+import com.phd.photowalk.widgets.PhotoGridColumnAdapter;
 
 public class AlbumDetailActivity extends Activity {
 	
@@ -36,10 +34,7 @@ public class AlbumDetailActivity extends Activity {
 		list = (ListView) findViewById(R.id.photolist);
 		
 		actionBar = (ActionBar) findViewById(R.id.actionbar);
-		for(Album a : app.albumList){
-			if(a.id.equals(albumId))
-				actionBar.setTitle(a.name);
-		}
+		actionBar.setTitle("Album Photos");
 		
 		
 		albumId = getIntent().getStringExtra(EXTA_ALBUM_ID);
