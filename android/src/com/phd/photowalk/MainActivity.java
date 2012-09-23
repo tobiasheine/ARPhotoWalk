@@ -17,6 +17,8 @@ import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -56,6 +58,11 @@ public class MainActivity extends Activity implements IFLocationUpdate{
 	
 	private ActionBar actionBar;
 	
+	private float mLat=0;
+	private float mLon=0;
+	
+	private static final double MAX_DISTANCE = 1.0;
+	
 	private HashMap<Integer, String> categoryMap;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,17 +98,51 @@ public class MainActivity extends Activity implements IFLocationUpdate{
         app.setLocationUpdater(this);
      }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	return super.onOptionsItemSelected(item);
+    }
+    
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	if(mLat > 0 && mLon >0){
+    		double distance = distFrom(app.getLastKnownLocation().getLatitude(), app.getLastKnownLocation().getLongitude(), mLat, mLon);
+    		
+    		if(distance > MAX_DISTANCE){
+    			aroundTask = new LoadAlbumsAroundYouTask();
+    			sendLocation((float)app.getLastKnownLocation().getLatitude(), (float)app.getLastKnownLocation().getLongitude(),0);
+    		}
+    	}
+    	
+    }
+    
 	/**
 	 * listener method called when the location of the user has changed
 	 * used for informing the ArchitectView about a new location of the user
 	 */
 	@Override
 	public void sendLocation(float lat, float lon, float accuracy) {
-		if(aroundTask.getStatus() == Status.PENDING)
+		if(aroundTask.getStatus() == Status.PENDING){
+			mLat = lat;
+			mLon = lon;
 			aroundTask.execute(lat,lon);
+		}
 	}
 	
 	private void setCategories(){
+		//clear
+		for (int i = 0; i < numCategories.length; i++) {
+			numCategories[i] = 0;
+		}
+		
 		for(Album album : app.albumList){
 			Iterator<Entry<Integer, String>> it = categoryMap.entrySet().iterator();
 			while(it.hasNext()){
@@ -257,4 +298,19 @@ public class MainActivity extends Activity implements IFLocationUpdate{
 		
 		return null;
 	}
+	
+	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
+		 double earthRadius = 3958.75;
+		 double dLat = Math.toRadians(lat2-lat1);
+		 double dLng = Math.toRadians(lng2-lng1);
+		 double sindLat = Math.sin(dLat / 2);
+		 double sindLng = Math.sin(dLng / 2);
+		 double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(lat1) * Math.cos(lat2);
+		 double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		 double dist = earthRadius * c;
+		
+		 return dist;
+	}
+	
+	
 }
