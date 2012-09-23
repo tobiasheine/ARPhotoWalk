@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:background="@drawable/actionbar_background"
+    android:layout_width="fill_parent"
+    android:layout_height="90dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+>
+    <ImageButton 
+        android:id="@+id/home_button"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="5dp"
+        android:paddingRight="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/home"/>
+    <TextView 
+        android:id="@+id/title"
+        android:layout_toRightOf="@id/home_button"
+        android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="AlbumTitle"
+        android:gravity="center_vertical"/>
+    
+	<ImageButton 
+	    android:id="@+id/refresh"
+	    android:layout_width="wrap_content"
+	    android:layout_height="fill_parent"
+	    android:src="@drawable/refresh"
+	    android:background="@android:color/transparent"
+	    android:layout_alignParentRight="true"
+	    />    
+    
+    <ProgressBar 
+        android:id="@+id/actionbar:progress"
+        android:padding="5dp"
+        android:layout_toLeftOf="@id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:visibility="visible"/>
+</RelativeLayout>   
+       
+           

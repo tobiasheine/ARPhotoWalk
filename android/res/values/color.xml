@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="actionbar_background_start">#575757</color>
+    <color name="actionbar_background_end">#363636</color>
+    
+    <color name="twitter_profile_button_number_text_color">#CCCCCC</color>
+    <color name="twitter_profile_button_label_color">#666666</color>
+    
+    <color name="grey_background">#333333</color>
+    <color name="peoplelist_text">#5E5E5E</color>
+    
+</resources>
