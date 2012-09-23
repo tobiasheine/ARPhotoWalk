@@ -26,25 +26,23 @@
             moz-border-radius: 10px;
             -webkit-border-radius: 10px;
             -khtml-border-radius: 10px;
-            border-radius: 10px;
-            
+            border-radius: 10px; 
         }
         
-        /* CSS Style for status message at the top of the HUD */
-        .status {
-            border-radius: 2em;
-            border: solid 2px #6d6d6d;
-            background-color: rgba(256, 193, 0, 0.7);
-            color: black;
-            text-align: center;
-            font-weight: bold;
-            
+        #header{
+            height: 3em;
+            width: 40%;
+            background-color: rgba(255,255,255,0.7);
+            padding: 5px 10px;
             position:absolute;
-            width: 90%;
-            height: 5%;
-            left: 5%;
-            top: 1%;
+			top:5%;
+			left:40%;
+            moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            -khtml-border-radius: 10px;
+            border-radius: 10px; 
         }
+        
         }	
         </style>
     
@@ -89,7 +87,11 @@
             
             //variable that keeps the jsonData received from the native app
             var jsonObject;
+            var curCategoryObjects;
             
+            var nextIndiId = 0;
+            
+            var curCategory;
             
             //function that gets called when the displayed poi bubble is clicked
             //sends the id of the selected poi to the native app
@@ -119,7 +121,7 @@
                     // hide the bubble
                     document.getElementById("footer").style.display = 'block';
                     document.getElementById("poiName").innerHTML=jsonObject[id].name;
-                    document.getElementById("footer").onclick= generateOnPoiBubbleClickFunc(id);
+                    document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(id);
                     
                     // reset the previous selected poi
                     if(selectedObject != null)
@@ -131,7 +133,6 @@
                         selectedObject.img.scaling = 1.0;
                         selectedObject.poiObj.renderingOrder = 0;
                         selectedObject.poiObj.drawables.radar = radarCircle;
-                        selectedObject.poiObj.drawables.indicator = [];
                     }
                     
                     // set a new select status for the current selected poi
@@ -139,7 +140,6 @@
                     selectedObject.arLabel.style.backgroundColor = '#FFFFFFFF';
                     selectedObject.poiObj.renderingOrder = 1;
                     selectedObject.poiObj.drawables.radar = selectedRadarCircle;
-                    selectedObject.poiObj.drawables.indicator = indiDrawable;
                     
                     // start the assigned animation
                     selectedObject.animation.start();
@@ -152,15 +152,21 @@
             //receives json-data as string and processes the contained information
             function newData(jsonData){
                 jsonObject = jsonData;
-                document.getElementById("statusElement").innerHTML='Loading JSON objects';
-                
-                
+                curCategoryObjects = new Array();
+               
+                var j = 0;
                 for(var i = 0; i < jsonObject.length; i++)
                 {
+                    if(jsonObject[i].category == curCategory) {
+                    	console.log("jsonObject[i].category = " + jsonObject[i].category);
+                    	curCategoryObjects[j] = jsonObject[i];
+                    	j++;
+                    }
+                    
                     var poidrawables = new Array();
                     var label = new AR.Label(jsonObject[i].name,1.0, {offsetY : -1.5,
                                              triggers: { 
-                                             onClick:
+                                             onClick: 
                                              createClickTrigger(jsonObject[i].id)},
                                              style : {textColor : '#FFC100',backgroundColor : '#FFFFFF80'}});
                     
@@ -184,15 +190,54 @@
                     jsonObject[i].poiObj = new AR.GeoObject(geoLoc, {drawables: {cam: poidrawables, radar: radarCircle}});
                 }
                 
-                document.getElementById("statusElement").innerHTML='JSON objects loaded';	
+                console.log("JSON objects loaded");
                 
                 
+                assignIndiToNext();
+                
+            }
+            
+            function setCategory(category){
+            	curCategory = category;
+				console.log("curCategory = " + curCategory);
+            }
+            
+            function assignIndiToNext() {				
+				console.log("curCategoryObjects.length = " +curCategoryObjects.length);
+				
+				// reset the property animation
+                curCategoryObjects[nextIndiId].animation.stop();                        
+    	        curCategoryObjects[nextIndiId].arLabel.style.backgroundColor = '#FFFFFF80';
+                curCategoryObjects[nextIndiId].img.scaling = 1.0;
+                curCategoryObjects[nextIndiId].poiObj.renderingOrder = 0;
+				curCategoryObjects[nextIndiId].poiObj.drawables.radar = radarCircle;
+				curCategoryObjects[nextIndiId].poiObj.drawables.indicator = [];
+				
+				// loop 
+            	if(nextIndiId == curCategoryObjects.length-1) {
+            		nextIndiId = 0;
+            	}
+				
+				if(curCategoryObjects.length != 1) {
+					nextIndiId++;
+				}
+				
+            	// set a new select status for the current selected poi
+                curCategoryObjects[nextIndiId].arLabel.style.backgroundColor = '#FFFFFFFF';
+                curCategoryObjects[nextIndiId].poiObj.renderingOrder = 1;
+            	curCategoryObjects[nextIndiId].poiObj.drawables.indicator = indiDrawable;	
+            	curCategoryObjects[nextIndiId].poiObj.drawables.radar = selectedRadarCircle;
+            	
+            	// show footer
+            	document.getElementById("footer").style.display = 'block';
+            	document.getElementById("poiName").innerHTML=curCategoryObjects[nextIndiId].name;
+                document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(curCategoryObjects[nextIndiId].index);
             }
             
             // Called if loading of the image fails.
             function errorLoadingImage() {
                 // set error message on HUD
-                document.getElementById("statusElement").innerHTML = "Unable to load image!";
+                
             }
             
             
@@ -219,10 +264,13 @@
         
         
 		<!-- Status element at the top of the HUD -->
-        <div id="statusElement" class="status"></div>
+        
         <br/>
         <br/>
         <br/>
+        <div id="header" onClick="assignIndiToNext()" >
+        	<p style="text-align:center;">Drücke!</p>
+        </div>
         <div id="footer">
             <h3><span id="poiName"></span></h3>
             <p style="text-align:center;">click for more...</p>
