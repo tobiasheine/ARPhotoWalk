@@ -114,6 +114,7 @@
                     // hide the bubble
                     document.getElementById("footer").style.display = 'block';
                     document.getElementById("poiName").innerHTML=jsonObject[id].name;
+                    document.getElementById("totalPhotos").innerHTML=jsonObject[id].totalPhotos;
                     document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(id);
                     
                     // reset the previous selected poi
@@ -219,6 +220,7 @@
             	// show footer
             	document.getElementById("footer").style.display = 'block';
             	document.getElementById("poiName").innerHTML=selectedCategoryObject.name;
+            	document.getElementById("totalPhotos").innerHTML="has "+ selectedCategoryObject.totalPhotos + " Photos..";
                 document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(selectedCategoryObject.index);
                 
                 if(curCategoryObjects.length != 1) {
@@ -270,6 +272,7 @@
         </div>
         <div id="footer">
             <h3><span id="poiName" style="color:#ffffff;"></span></h3>
-            <p style="text-align:center;color:#ffffff;">Interested?! Let's see some pictures!</p>
+            <span id="totalPhotos" style="color:#ffffff;"></span>
+            <p style="text-align:right;color:#ffffff;padding-top:5px;font-weight:bold;">Interested?! Push me!</p>
         </div>
     </body></html>

@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -172,6 +173,9 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 			TextView title = (TextView) convertView.findViewById(R.id.title);
 			title.setText(getTextforAdapter(category));
 			
+			ImageView imgView = (ImageView) convertView.findViewById(R.id.image);
+			imgView.setBackgroundResource(getBackgroundResource(category));
+			
 			convertView.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -190,6 +194,39 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 			return availableCategories.size();
 		}
 		
+	}
+	
+	private int getBackgroundResource(int category) {
+		switch (category) {
+		case CATEGORY_CAFE:
+			return R.drawable.coffee;
+		
+		case CATEGORY_CHILL:
+			return R.drawable.chillout;
+			
+		case CATEGORY_DRINK:
+			return R.drawable.drunk;
+		
+		
+		case CATEGORY_FOOD:
+			return R.drawable.food;
+		
+		
+		case CATEGORY_PARTY:
+			return R.drawable.party;
+			
+			
+		case CATEGORY_SHOP:
+			return R.drawable.buy;
+		
+		case CATEGORY_WORK:
+			return R.drawable.money;
+
+	default:
+		break;
+		}
+		
+		return 0;
 	}
 	
 	private String getTextforAdapter(Integer category){
