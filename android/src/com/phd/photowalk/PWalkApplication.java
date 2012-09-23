@@ -48,7 +48,7 @@ public class PWalkApplication extends Application implements LocationListener{
 		loc = location;
 		
 		if(locUpdate != null){
-			locUpdate.sendLocation((float)loc.getLatitude(), (float)loc.getLongitude(), (float)loc.getAccuracy());
+			locUpdate.sendLocation((float)loc.getLatitude(), (float)loc.getLongitude(), 0);
 		}
 	}
 

@@ -2,6 +2,7 @@ package com.phd.photowalk;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.cert.LDAPCertStoreParameters;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -13,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -162,6 +164,7 @@ public class ARActivity extends Activity implements ArchitectUrlListener, IFLoca
 	public void sendLocation(float lat, float lon, float accuracy) {
 		try{
 			if(this.architectView != null){
+				Log.d("DEBUG", "location lat: "+lat+" lon:"+lon+" alt:"+accuracy);
 				this.architectView.setLocation(lat, lon, accuracy);
 			}
 		}catch (Exception e) {

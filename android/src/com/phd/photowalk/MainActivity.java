@@ -29,7 +29,7 @@ import com.phd.photowalk.api.SimpleEyeEmAPI;
 import com.phd.photowalk.model.Album;
 import com.phd.photowalk.widgets.ActionBar;
 
-public class MainActivity extends Activity implements IFLocationUpdate/*, ArchitectUrlListener*/{
+public class MainActivity extends Activity implements IFLocationUpdate{
 	private PWalkApplication app;
 	private LoadAlbumsAroundYouTask aroundTask;
 	
@@ -41,13 +41,13 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	public static final String WORK = "Office, Tech Startup, Art Gallery, Event Space";
 	public static final String SHOP = "Boutique, Clothing Store, Shoe Store";
 	
-	public static final int CATEGORY_FOOD=0;
-	public static final int CATEGORY_DRINK=1;
-	public static final int CATEGORY_CHILL=2;
-	public static final int CATEGORY_PARTY=3;
-	public static final int CATEGORY_CAFE=4;
-	public static final int CATEGORY_WORK=5;
-	public static final int CATEGORY_SHOP=6;
+	public static final int CATEGORY_FOOD	=	0;
+	public static final int CATEGORY_DRINK	=	1;
+	public static final int CATEGORY_CHILL	=	2;
+	public static final int CATEGORY_PARTY	=	3;
+	public static final int CATEGORY_CAFE	=	4;
+	public static final int CATEGORY_WORK	=	5;
+	public static final int CATEGORY_SHOP	=	6;
 	
 	private int[] numCategories = new int[7];
 	
@@ -231,25 +231,25 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	private String getTextforAdapter(Integer category){
 		switch (category) {
 			case CATEGORY_CAFE:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to drink a nice coffee?";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to sit down and and enjoy a coffee";
 			
 			case CATEGORY_CHILL:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to chill out.";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to catch some fresh air";
 				
 			case CATEGORY_DRINK:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to get drunk.";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to get wasted";
 			
 			case CATEGORY_FOOD:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to get some food.";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to get some food";
 			
 			case CATEGORY_PARTY:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to party until sunrise";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to party until sunrise";
 				
 			case CATEGORY_SHOP:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to buy something?";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to spend some money";
 			
 			case CATEGORY_WORK:
-				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" places to get some money!";
+				return numCategories[category]+(numCategories[category] > 1 ? " places" : " place")+" to earn some money!";
 
 		default:
 			break;

@@ -46,7 +46,7 @@ public class Album {
 		
 		JSONObject loc = json.optJSONObject("location");
 		if( loc != null){
-			album.point = new Point(Float.valueOf(loc.getString("latitude")), Float.valueOf(loc.getString("longitude")), 150);
+			album.point = new Point(Float.valueOf(loc.getString("latitude")), Float.valueOf(loc.getString("longitude")), 0);
 			
 			JSONObject venueService = loc.optJSONObject("venueService");
 			if(venueService != null && venueService.has("categoryName"))
