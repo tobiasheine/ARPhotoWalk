@@ -16,31 +16,23 @@
         
         #footer{
             height: 4em;
-            background-color: rgba(255,255,255,0.5);
+            background-image:url('background.png');
             padding: 5px 10px;
-            display:none;
             position:absolute;
-            bottom: 0px;
-            left: 0px;
-            right:0px;
-            moz-border-radius: 10px;
-            -webkit-border-radius: 10px;
-            -khtml-border-radius: 10px;
-            border-radius: 10px; 
+            bottom: 8%;
+            left: 8%;
+            right: 8%;
+            border-style: ridge;
         }
         
         #header{
             height: 3em;
             width: 40%;
-            background-color: rgba(255,255,255,0.7);
-            padding: 5px 10px;
+            background-image:url('background.png');
             position:absolute;
-			top:5%;
-			left:40%;
-            moz-border-radius: 10px;
-            -webkit-border-radius: 10px;
-            -khtml-border-radius: 10px;
-            border-radius: 10px; 
+			top:16%;
+			right:5%;
+			border-style: ridge;
         }
         
         }	
@@ -59,11 +51,11 @@
             // Create new images, which will be loaded right away
 			var indiImg = new AR.ImageResource("indicator.png");
 			
-			var indiDrawable = new AR.ImageDrawable(indiImg, 0.1, {
+			var indiDrawable = new AR.ImageDrawable(indiImg, 0.2, {
     			verticalAnchor: AR.CONST.VERTICAL_ANCHOR.TOP
 			});
             
-            AR.radar.background = new AR.ImageResource("circle.png");
+            AR.radar.background = new AR.ImageResource("radar.png");
         	AR.radar.positionX = 0.1;
 			AR.radar.positionY = 0.1;
 			AR.radar.width = 0.4;
@@ -274,10 +266,10 @@
         <br/>
         <br/>
         <div id="header" onClick="assignIndiToNext()" >
-        	<p style="text-align:center;">Drücke!</p>
+        	<p style="line-height:3em; text-align:center;color:#ffffff;">Nope, next one.</p>
         </div>
         <div id="footer">
-            <h3><span id="poiName"></span></h3>
-            <p style="text-align:center;">click for more...</p>
+            <h3><span id="poiName" style="color:#ffffff;"></span></h3>
+            <p style="text-align:center;color:#ffffff;">Interested?! Let's see some pictures!</p>
         </div>
     </body></html>
