@@ -83,7 +83,7 @@
             
             // current selected object
             var selectedObject = null;
-            
+            var selectedCategoryObject = null;
             
             //variable that keeps the jsonData received from the native app
             var jsonObject;
@@ -92,6 +92,7 @@
             var nextIndiId = 0;
             
             var curCategory;
+            
             
             //function that gets called when the displayed poi bubble is clicked
             //sends the id of the selected poi to the native app
@@ -206,32 +207,36 @@
 				console.log("curCategoryObjects.length = " +curCategoryObjects.length);
 				
 				// reset the property animation
-                curCategoryObjects[nextIndiId].animation.stop();                        
-    	        curCategoryObjects[nextIndiId].arLabel.style.backgroundColor = '#FFFFFF80';
-                curCategoryObjects[nextIndiId].img.scaling = 1.0;
-                curCategoryObjects[nextIndiId].poiObj.renderingOrder = 0;
-				curCategoryObjects[nextIndiId].poiObj.drawables.radar = radarCircle;
-				curCategoryObjects[nextIndiId].poiObj.drawables.indicator = [];
+				if(selectedCategoryObject != null) {
+					selectedCategoryObject.animation.stop();                        
+	    	        selectedCategoryObject.arLabel.style.backgroundColor = '#FFFFFF80';
+    	            selectedCategoryObject.img.scaling = 1.0;
+        	        selectedCategoryObject.poiObj.renderingOrder = 0;
+					selectedCategoryObject.poiObj.drawables.radar = radarCircle;
+					selectedCategoryObject.poiObj.drawables.indicator = [];
+				}
+                
+                selectedCategoryObject = curCategoryObjects[nextIndiId];
+            	
+            	// set a new select status for the current selected poi
+                selectedCategoryObject.arLabel.style.backgroundColor = '#FFFFFFFF';
+                selectedCategoryObject.poiObj.renderingOrder = 1;
+            	selectedCategoryObject.poiObj.drawables.indicator = indiDrawable;	
+            	selectedCategoryObject.poiObj.drawables.radar = selectedRadarCircle;
+            	
+            	// show footer
+            	document.getElementById("footer").style.display = 'block';
+            	document.getElementById("poiName").innerHTML=selectedCategoryObject.name;
+                document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(selectedCategoryObject.index);
+                
+                if(curCategoryObjects.length != 1) {
+					nextIndiId++;
+				}
 				
 				// loop 
             	if(nextIndiId == curCategoryObjects.length-1) {
             		nextIndiId = 0;
             	}
-				
-				if(curCategoryObjects.length != 1) {
-					nextIndiId++;
-				}
-				
-            	// set a new select status for the current selected poi
-                curCategoryObjects[nextIndiId].arLabel.style.backgroundColor = '#FFFFFFFF';
-                curCategoryObjects[nextIndiId].poiObj.renderingOrder = 1;
-            	curCategoryObjects[nextIndiId].poiObj.drawables.indicator = indiDrawable;	
-            	curCategoryObjects[nextIndiId].poiObj.drawables.radar = selectedRadarCircle;
-            	
-            	// show footer
-            	document.getElementById("footer").style.display = 'block';
-            	document.getElementById("poiName").innerHTML=curCategoryObjects[nextIndiId].name;
-                document.getElementById("footer").onclick=generateOnPoiBubbleClickFunc(curCategoryObjects[nextIndiId].index);
             }
             
             // Called if loading of the image fails.
