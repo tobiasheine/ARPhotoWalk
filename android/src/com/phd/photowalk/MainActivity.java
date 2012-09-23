@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	private PHDApplication app;
 	private LoadAlbumsAroundYouTask aroundTask;
 	
-	public static final String FOOD = "Restaurants, Italien Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream";
+	public static final String FOOD = "Restaurants, Italian Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream";
 	public static final String DRINK = "Bars, Pub, Cocktail Bar";
 	public static final String CHILL = "Parks, Garden";
 	public static final String PARTY = "Rock Club, Concert Hall";
@@ -95,10 +95,10 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 			Iterator it = categoryMap.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry<Integer, String> pairs = (Map.Entry<Integer, String>)(it.next());
-				if(pairs.getValue().contains(album.venueType))
+				if(pairs.getValue().contains(album.venueType) && album.venueType.length() > 0)
 					album.category = pairs.getKey();
 				
-				if(!availableCategories.contains(album.category))
+				if(!availableCategories.contains(album.category) && album.category != -1)
 					availableCategories.add(album.category);
 				
 			}
