@@ -12,7 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-public class PHDApplication extends Application implements LocationListener{
+public class PWalkApplication extends Application implements LocationListener{
 
 	private LocationManager locManager;
 	private Location loc;

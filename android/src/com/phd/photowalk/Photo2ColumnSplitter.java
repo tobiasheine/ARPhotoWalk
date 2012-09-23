@@ -6,16 +6,15 @@ import java.util.Vector;
 
 import com.phd.photowalk.model.Photo;
 
-
 public class Photo2ColumnSplitter {
 
 	private ArrayList<Vector<Photo>> list;
 	private List<Photo> mPhotos;
 	private int mRemainingPixels;
-	private PHDApplication ac;
+	private PWalkApplication ac;
 	private int max_pics_in_row=0;
 	
-	public Photo2ColumnSplitter(PHDApplication ac) {
+	public Photo2ColumnSplitter(PWalkApplication ac) {
 		this.ac=ac;
 		mRemainingPixels = ac.mDeviceWidth;
 		list = new ArrayList<Vector<Photo>>();		
