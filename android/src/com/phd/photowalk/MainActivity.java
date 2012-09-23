@@ -32,12 +32,12 @@ public class MainActivity extends Activity implements IFLocationUpdate/*, Archit
 	private PHDApplication app;
 	private LoadAlbumsAroundYouTask aroundTask;
 	
-	public static final String FOOD = "Restaurants, Italian Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream";
-	public static final String DRINK = "Bars, Pub, Cocktail Bar";
+	public static final String FOOD = "Restaurants, Italian Restaurant, Burger Joint, Fast Food Restaurant, Pizza, Noodle Haus, Ice Cream, Pizza Place, Korean Restaurant";
+	public static final String DRINK = "Bars, Pub, Cocktail Bar, Beer Garden";
 	public static final String CHILL = "Parks, Garden";
 	public static final String PARTY = "Rock Club, Concert Hall";
-	public static final String CAFE = "Café, Bagel Shop, Cupcake";
-	public static final String WORK = "Office, Tech Startup";
+	public static final String CAFE = "Café, Bagel Shop, Cupcake, Bakery";
+	public static final String WORK = "Office, Tech Startup, Art Gallery, Event Space";
 	public static final String SHOP = "Boutique, Clothing Store, Shoe Store";
 	
 	public static final int CATEGORY_FOOD=0;
